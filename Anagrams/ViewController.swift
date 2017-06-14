@@ -12,7 +12,14 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let inv = LetterInventory(data: "sam")
+//        do {
+//            try inv.set(letter: "a", value: 0)
+//        } catch {
+//            print(error)
+//        }
+        let inv2 = LetterInventory(data: "yasmin")
+        print(inv.add(other: inv2))
     }
 
     override func didReceiveMemoryWarning() {
