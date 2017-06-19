@@ -23,7 +23,7 @@ class Anagrams: NSObject {
         }
     }
 
-    func printAnagrams(text: String, max: Int) throws { // TODO: rename this!
+    func generateAnagrams(text: String, max: Int) throws -> Array<Array<String>> {
         if max < 0 {
             throw AnagramsError.invalidMaximumNumberOfWords
         }
@@ -35,25 +35,28 @@ class Anagrams: NSObject {
             }
         }
         var anagrams = Array<String>()
-        printAnagrams(remainingLetters: lettersInText,
-              relevantWords: relevantWords, anagrams: &anagrams, max: max)
+        return generateAnagrams(remainingLetters: lettersInText,
+                                relevantWords: relevantWords, anagrams: &anagrams, max: max)
     }
 
-    func printAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
-                       anagrams: inout Array<String>, max: Int) {
+    func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
+                          anagrams: inout Array<String>, max: Int) -> Array<Array<String>> {
         if (remainingLetters.isEmpty()) {
-            print(anagrams);
+            return [anagrams]
         } else {
+            var results = Array<Array<String>>()
             for word in relevantWords {
                 if let sub = remainingLetters.subtract(other: inventories[word]!) {
                     if (anagrams.count < max || max == 0) {
                         anagrams.append(word)
-                        printAnagrams(remainingLetters: sub, relevantWords: relevantWords,
-                                      anagrams: &anagrams, max: max)
+                        let result = generateAnagrams(remainingLetters: sub, relevantWords: relevantWords,
+                                                      anagrams: &anagrams, max: max)
+                        results.append(contentsOf: result)
                         anagrams.removeLast()
                     }
                 }
             }
+            return results
         }
     }
 }
