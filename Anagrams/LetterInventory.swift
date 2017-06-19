@@ -82,7 +82,7 @@ class LetterInventory: NSObject {
         let inv = LetterInventory()
         for i in 0 ..< WIDTH {
             let counts = self.inventory[i] - other.inventory[i]
-            if counts > 0 {
+            if counts >= 0 {
                 inv.inventory[i] = counts
                 inv.size += counts
             } else {
@@ -94,16 +94,16 @@ class LetterInventory: NSObject {
 
     class func letterForIndex(index: Int) -> Character {
         let aScalar = "a".unicodeScalars.first
-        let characterScalar = Int(aScalar!.value) + index
-        return Character(UnicodeScalar(characterScalar)!)
+        let letterScalar = Int(aScalar!.value) + index
+        return Character(UnicodeScalar(letterScalar)!)
     }
 
     class func indexOfLetter(letter: Character) -> Int? {
         let zScalar = "z".unicodeScalars.first
         let aScalar = "a".unicodeScalars.first
-        let currentScalar = String(letter).lowercased().unicodeScalars.first
-        let index = Int(currentScalar!.value) - Int(aScalar!.value)
-        if index < 0 || Int(currentScalar!.value) - Int(zScalar!.value) > 0 {
+        let letterScalar = String(letter).lowercased().unicodeScalars.first
+        let index = Int(letterScalar!.value) - Int(aScalar!.value)
+        if index < 0 || Int(letterScalar!.value) - Int(zScalar!.value) > 0 {
             return nil
         }
         return index

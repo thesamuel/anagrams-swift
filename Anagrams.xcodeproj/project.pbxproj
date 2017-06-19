@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		613F8B801EF0DF7000C35F0C /* Anagrams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613F8B7F1EF0DF7000C35F0C /* Anagrams.swift */; };
 		613F8B821EF0E0B800C35F0C /* LetterInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613F8B811EF0E0B800C35F0C /* LetterInventory.swift */; };
+		613F8B861EF3AEEC00C35F0C /* dict3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 613F8B831EF3AEEC00C35F0C /* dict3.txt */; };
+		613F8B871EF3AEEC00C35F0C /* dict2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 613F8B841EF3AEEC00C35F0C /* dict2.txt */; };
+		613F8B881EF3AEEC00C35F0C /* dict1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 613F8B851EF3AEEC00C35F0C /* dict1.txt */; };
 		6148D3901EED010900E691AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6148D38F1EED010900E691AA /* AppDelegate.swift */; };
 		6148D3921EED010900E691AA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6148D3911EED010900E691AA /* ViewController.swift */; };
 		6148D3951EED010900E691AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6148D3931EED010900E691AA /* Main.storyboard */; };
@@ -19,6 +22,9 @@
 /* Begin PBXFileReference section */
 		613F8B7F1EF0DF7000C35F0C /* Anagrams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Anagrams.swift; sourceTree = "<group>"; };
 		613F8B811EF0E0B800C35F0C /* LetterInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LetterInventory.swift; sourceTree = "<group>"; };
+		613F8B831EF3AEEC00C35F0C /* dict3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dict3.txt; sourceTree = "<group>"; };
+		613F8B841EF3AEEC00C35F0C /* dict2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dict2.txt; sourceTree = "<group>"; };
+		613F8B851EF3AEEC00C35F0C /* dict1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dict1.txt; sourceTree = "<group>"; };
 		6148D38C1EED010900E691AA /* Anagrams.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anagrams.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6148D38F1EED010900E691AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6148D3911EED010900E691AA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -58,10 +64,13 @@
 		6148D38E1EED010900E691AA /* Anagrams */ = {
 			isa = PBXGroup;
 			children = (
+				613F8B851EF3AEEC00C35F0C /* dict1.txt */,
+				613F8B841EF3AEEC00C35F0C /* dict2.txt */,
+				613F8B831EF3AEEC00C35F0C /* dict3.txt */,
 				613F8B7F1EF0DF7000C35F0C /* Anagrams.swift */,
 				613F8B811EF0E0B800C35F0C /* LetterInventory.swift */,
-				6148D38F1EED010900E691AA /* AppDelegate.swift */,
 				6148D3911EED010900E691AA /* ViewController.swift */,
+				6148D38F1EED010900E691AA /* AppDelegate.swift */,
 				6148D3931EED010900E691AA /* Main.storyboard */,
 				6148D3961EED010900E691AA /* Assets.xcassets */,
 				6148D3981EED010900E691AA /* LaunchScreen.storyboard */,
@@ -132,7 +141,10 @@
 			files = (
 				6148D39A1EED010900E691AA /* LaunchScreen.storyboard in Resources */,
 				6148D3971EED010900E691AA /* Assets.xcassets in Resources */,
+				613F8B861EF3AEEC00C35F0C /* dict3.txt in Resources */,
 				6148D3951EED010900E691AA /* Main.storyboard in Resources */,
+				613F8B881EF3AEEC00C35F0C /* dict1.txt in Resources */,
+				613F8B871EF3AEEC00C35F0C /* dict2.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

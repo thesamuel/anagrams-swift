@@ -12,14 +12,21 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let inv = LetterInventory(data: "sam")
-//        do {
-//            try inv.set(letter: "a", value: 0)
-//        } catch {
-//            print(error)
-//        }
-        let inv2 = LetterInventory(data: "yasmin")
-        print(inv.add(other: inv2))
+        if let path = Bundle.main.path(forResource: "dict3", ofType: "txt") {
+            do {
+                let data = try String(contentsOfFile: path, encoding: .utf8)
+                let dictionary = data.components(separatedBy: .newlines)
+                let anagramSolver = Anagrams(dictionary: dictionary)
+                do {
+                    try anagramSolver.printAnagrams(text: "samuel", max: 0)
+                } catch {
+                    print(error)
+                }
+            } catch {
+                print(error)
+            }
+        }
+        print("done!")
     }
 
     override func didReceiveMemoryWarning() {
