@@ -10,11 +10,28 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textView: UITextView!
+
+    @IBAction func donePressed(_ sender: Any) {
+        textField.endEditing(false)
+    }
+
+      override func viewDidLoad() {
         super.viewDidLoad()
     }
 
-    func generateAnagrams(text: String) -> Array<Array<String>>? {
+    @IBAction func generateAnagrams(_ sender: Any) {
+        let text = self.textField.text!
+        DispatchQueue.global(qos: .userInitiated).async {
+            let anagrams = self.makeAnagrams(text: text)
+            DispatchQueue.main.async {
+                self.textView.text = anagrams?.description
+            }
+        }
+    }
+
+    func makeAnagrams(text: String) -> Array<Array<String>>? {
         if let path = Bundle.main.path(forResource: "dict3", ofType: "txt") {
             do {
                 let data = try String(contentsOfFile: path, encoding: .utf8)
