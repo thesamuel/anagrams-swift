@@ -8,25 +8,66 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var tableView: UITableView!
+    let anagramSolver: Anagrams?
+    var anagramResults: [[String]]?
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.anagramSolver = ViewController.createAnagramSolver()
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        self.anagramSolver = ViewController.createAnagramSolver()
+        super.init(coder: aDecoder)
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
+        if let results = anagramResults {
+            cell.textLabel?.text = results[indexPath.row].description
+        }
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let results = anagramResults {
+            return results.count
+        }
+        return 0
+    }
+
+    class func createAnagramSolver() -> Anagrams? {
+        var anagramSolver: Anagrams?
+        if let path = Bundle.main.path(forResource: "dict3", ofType: "txt") {
+            do {
+                let data = try String(contentsOfFile: path, encoding: .utf8)
+                let dictionary = data.components(separatedBy: .newlines)
+                anagramSolver = Anagrams(dictionary: dictionary)
+            } catch {
+                print(error)
+            }
+        }
+        return anagramSolver
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
 
     @IBAction func donePressed(_ sender: Any) {
         textField.endEditing(false)
     }
 
-      override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
     @IBAction func generateAnagrams(_ sender: Any) {
         let text = self.textField.text!
         DispatchQueue.global(qos: .userInitiated).async {
-            let anagrams = self.makeAnagrams(text: text)
+            self.anagramResults = self.makeAnagrams(text: text)
             DispatchQueue.main.async {
-                self.textView.text = anagrams?.description
+                self.tableView.reloadData()
             }
         }
     }
@@ -38,7 +79,7 @@ class ViewController: UIViewController {
                 let dictionary = data.components(separatedBy: .newlines)
                 let anagramSolver = Anagrams(dictionary: dictionary)
                 do {
-                    return try anagramSolver.generateAnagrams(text: text, max: 0)
+                    return try anagramSolver.generateAnagrams(text: text, max: nil)
                 } catch {
                     print(error)
                 }

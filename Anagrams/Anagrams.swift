@@ -23,8 +23,8 @@ class Anagrams: NSObject {
         }
     }
 
-    func generateAnagrams(text: String, max: Int) throws -> Array<Array<String>> {
-        if max < 0 {
+    func generateAnagrams(text: String, max: Int?) throws -> Array<Array<String>> {
+        if max != nil && max! < 0 {
             throw AnagramsError.invalidMaximumNumberOfWords
         }
         let lettersInText = LetterInventory(data: text)
@@ -40,14 +40,14 @@ class Anagrams: NSObject {
     }
 
     func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
-                          anagrams: inout Array<String>, max: Int) -> Array<Array<String>> {
+                          anagrams: inout Array<String>, max: Int?) -> Array<Array<String>> {
         if (remainingLetters.isEmpty()) {
             return [anagrams]
         } else {
             var results = Array<Array<String>>()
             for word in relevantWords {
                 if let sub = remainingLetters.subtract(other: inventories[word]!) {
-                    if (anagrams.count < max || max == 0) {
+                    if (max == nil || anagrams.count < max!) {
                         anagrams.append(word)
                         let result = generateAnagrams(remainingLetters: sub, relevantWords: relevantWords,
                                                       anagrams: &anagrams, max: max)
