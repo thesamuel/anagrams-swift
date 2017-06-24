@@ -23,7 +23,7 @@ class Anagrams: NSObject {
         }
     }
 
-    func generateAnagrams(text: String, max: Int?) throws -> Array<Array<String>> {
+    func generateAnagrams(text: String, max: Int?) throws -> Set<Set<String>> {
         if max != nil && max! < 0 {
             throw AnagramsError.invalidMaximumNumberOfWords
         }
@@ -34,25 +34,22 @@ class Anagrams: NSObject {
                 relevantWords.insert(word)
             }
         }
-        var anagrams = Array<String>()
-        return generateAnagrams(remainingLetters: lettersInText,
-                                relevantWords: relevantWords, anagrams: &anagrams, max: max)
+        return generateAnagrams(remainingLetters: lettersInText, relevantWords: relevantWords,
+                                anagrams: Set<String>(), max: max)
     }
 
     func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
-                          anagrams: inout Array<String>, max: Int?) -> Array<Array<String>> {
+                          anagrams: Set<String>, max: Int?) -> Set<Set<String>> {
         if (remainingLetters.isEmpty()) {
-            return [anagrams]
+            return Set([anagrams])
         } else {
-            var results = Array<Array<String>>()
+            var results = Set<Set<String>>()
             for word in relevantWords {
                 if let sub = remainingLetters.subtract(other: inventories[word]!) {
                     if (max == nil || anagrams.count < max!) {
-                        anagrams.append(word)
                         let result = generateAnagrams(remainingLetters: sub, relevantWords: relevantWords,
-                                                      anagrams: &anagrams, max: max)
-                        results.append(contentsOf: result)
-                        anagrams.removeLast()
+                                                      anagrams: anagrams.union([word]), max: max)
+                        results.formUnion(result)
                     }
                 }
             }

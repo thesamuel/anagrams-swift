@@ -13,7 +13,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     let anagramSolver: Anagrams?
-    var anagramResults: [[String]]?
+    var anagramResults: [Set<String>]?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         self.anagramSolver = ViewController.createAnagramSolver()
@@ -72,14 +72,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
-    func makeAnagrams(text: String) -> Array<Array<String>>? {
+    func makeAnagrams(text: String) -> Array<Set<String>>? {
         if let path = Bundle.main.path(forResource: "dict3", ofType: "txt") {
             do {
                 let data = try String(contentsOfFile: path, encoding: .utf8)
                 let dictionary = data.components(separatedBy: .newlines)
                 let anagramSolver = Anagrams(dictionary: dictionary)
                 do {
-                    return try anagramSolver.generateAnagrams(text: text, max: nil)
+                    let results = try anagramSolver.generateAnagrams(text: text, max: nil)
+                    return Array.init(results)
                 } catch {
                     print(error)
                 }
