@@ -34,12 +34,13 @@ class Anagrams: NSObject {
                 relevantWords.insert(word)
             }
         }
+        var anagrams = Set<String>()
         return generateAnagrams(remainingLetters: lettersInText, relevantWords: relevantWords,
-                                anagrams: Set<String>(), max: max)
+                                anagrams: &anagrams, max: max)
     }
 
     func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
-                          anagrams: Set<String>, max: Int?) -> Set<Set<String>> {
+                          anagrams: inout Set<String>, max: Int?) -> Set<Set<String>> {
         if (remainingLetters.isEmpty()) {
             return Set([anagrams])
         } else {
@@ -47,8 +48,10 @@ class Anagrams: NSObject {
             for word in relevantWords {
                 if let sub = remainingLetters.subtract(other: inventories[word]!) {
                     if (max == nil || anagrams.count < max!) {
+                        anagrams.formUnion([word])
                         let result = generateAnagrams(remainingLetters: sub, relevantWords: relevantWords,
-                                                      anagrams: anagrams.union([word]), max: max)
+                                                      anagrams: &anagrams, max: max)
+                        anagrams.remove(word)
                         results.formUnion(result)
                     }
                 }
