@@ -10,11 +10,11 @@ import UIKit
 
 class LetterInventory: NSObject {
 
-    var inventory: [Int]
-
     public override var description: String { return self.toString() }
     public var size: Int
     public let WIDTH = 26
+
+    var inventory: [Int]
 
     enum LetterInventoryError: Error {
         case invalidCharacter

@@ -15,6 +15,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let anagramSolver: Anagrams?
     var anagramResults: [Set<String>]?
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
+    // Initialization
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         self.anagramSolver = ViewController.createAnagramSolver()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -23,21 +28,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     required init?(coder aDecoder: NSCoder) {
         self.anagramSolver = ViewController.createAnagramSolver()
         super.init(coder: aDecoder)
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
-        if let results = anagramResults {
-            cell.textLabel?.text = results[indexPath.row].description
-        }
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let results = anagramResults {
-            return results.count
-        }
-        return 0
     }
 
     class func createAnagramSolver() -> Anagrams? {
@@ -54,25 +44,39 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return anagramSolver
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    // Table View Protocol
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
+        if let results = anagramResults {
+            cell.textLabel?.text = results[indexPath.row].description
+        }
+        return cell
     }
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let results = anagramResults {
+            return results.count
+        }
+        return 0
+    }
+
+    // Actions
     @IBAction func donePressed(_ sender: Any) {
         textField.endEditing(false)
     }
 
     @IBAction func generateAnagrams(_ sender: Any) {
-        let text = self.textField.text!
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.anagramResults = self.makeAnagrams(text: text)
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+        if let text = self.textField.text {
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.anagramResults = self.generateAnagrams(text: text)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
 
-    func makeAnagrams(text: String) -> Array<Set<String>>? {
+    func generateAnagrams(text: String) -> Array<Set<String>>? {
         if let path = Bundle.main.path(forResource: "dict3", ofType: "txt") {
             do {
                 let data = try String(contentsOfFile: path, encoding: .utf8)
@@ -95,7 +99,4 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
 }
-
