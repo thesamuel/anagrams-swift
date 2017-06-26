@@ -10,17 +10,19 @@ import UIKit
 
 class Anagrams: NSObject {
 
-    var inventories = [String: LetterInventory]()
+    let inventories: [String: LetterInventory]
 
     enum AnagramsError: Error {
         case invalidMaximumNumberOfWords
     }
 
     init(dictionary: [String]) {
+        var inventories = [String: LetterInventory]()
         for word in dictionary {
             let inventory = LetterInventory(data: word)
             inventories[word] = inventory
         }
+        self.inventories = inventories
     }
 
     func generateAnagrams(text: String, max: Int?) throws -> Set<Set<String>> {
