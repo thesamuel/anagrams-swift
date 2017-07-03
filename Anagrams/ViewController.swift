@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     let anagramSolver: Anagrams?
@@ -17,6 +18,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        progressView.progress = 0
     }
 
     // Initialization
@@ -76,6 +79,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
+    func updateProgress(percent: Double) {
+        DispatchQueue.main.async {
+            self.progressView.progress = Float(percent)
+        }
+    }
+
     func generateAnagrams(text: String) -> Array<Set<String>>? {
         if let path = Bundle.main.path(forResource: "dict3", ofType: "txt") {
             do {
@@ -83,7 +92,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 let dictionary = data.components(separatedBy: .newlines)
                 let anagramSolver = Anagrams(dictionary: dictionary)
                 do {
-                    let results = try anagramSolver.generateAnagrams(text: text, max: nil)
+                    let results = try anagramSolver.generateAnagrams(text: text, max: nil, block: updateProgress)
+                    progressView.progress = 1
                     return Array.init(results)
                 } catch {
                     print(error)
