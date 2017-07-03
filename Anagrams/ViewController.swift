@@ -18,7 +18,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         progressView.progress = 0
     }
 
@@ -50,8 +49,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // Table View Protocol
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
-        if let results = anagramResults {
-            cell.textLabel?.text = results[indexPath.row].description
+        if let result = anagramResults {
+            cell.textLabel?.text = result[indexPath.row].description
         }
         return cell
     }
@@ -86,21 +85,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func generateAnagrams(text: String) -> Array<Set<String>>? {
-        if let path = Bundle.main.path(forResource: "dict3", ofType: "txt") {
-            do {
-                let data = try String(contentsOfFile: path, encoding: .utf8)
-                let dictionary = data.components(separatedBy: .newlines)
-                let anagramSolver = Anagrams(dictionary: dictionary)
-                do {
-                    let results = try anagramSolver.generateAnagrams(text: text, max: nil, block: updateProgress)
-                    progressView.progress = 1
-                    return Array.init(results)
-                } catch {
-                    print(error)
+        DispatchQueue.main.async {
+            self.anagramResults = nil
+            self.tableView.reloadData()
+            self.progressView.progress = 0
+        }
+
+        do {
+            if let results = try anagramSolver?.generateAnagrams(text: text, max: nil, block: updateProgress) {
+                DispatchQueue.main.async {
+                    self.progressView.progress = 1 // TODO: handle error with color
                 }
-            } catch {
-                print(error)
+                return Array.init(results)
             }
+        } catch {
+            print(error)
         }
         return nil
     }
