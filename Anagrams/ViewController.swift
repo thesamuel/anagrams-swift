@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var speedControl: UISegmentedControl!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var tableView: UITableView!
@@ -70,7 +71,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func generateAnagrams(_ sender: Any) {
         if let text = self.textField.text {
             DispatchQueue.global(qos: .userInitiated).async {
-                self.anagramResults = self.generateAnagrams(text: text)
+                let fast: Bool = self.speedControl.selectedSegmentIndex == 0
+                if fast {
+                    print("fast processing beginning")
+                } else {
+                    print("slow processing beginning")
+                }
+                self.anagramResults = self.generateAnagrams(text: text, fast: fast)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -79,12 +86,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func updateProgress(percent: Double) {
-        DispatchQueue.main.async {
-            self.progressView.progress = Float(percent)
-        }
+        self.progressView.progress = Float(percent)
     }
 
-    func generateAnagrams(text: String) -> Array<Set<String>>? {
+    func generateAnagrams(text: String, fast: Bool) -> Array<Set<String>>? {
         DispatchQueue.main.async {
             self.anagramResults = nil
             self.tableView.reloadData()
@@ -92,10 +97,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
 
         do {
-            if let results = try anagramSolver?.generateAnagrams(text: text, max: nil, block: updateProgress) {
+            let start = Date();
+            if let results = try anagramSolver?.generateAnagrams(text: text, max: nil, block: updateProgress, fast: fast) {
                 DispatchQueue.main.async {
                     self.progressView.progress = 1 // TODO: handle error with color
                 }
+                let end = Date();
+                let timeInterval: TimeInterval = end.timeIntervalSince(start)
+                print(timeInterval)
                 return Array.init(results)
             }
         } catch {

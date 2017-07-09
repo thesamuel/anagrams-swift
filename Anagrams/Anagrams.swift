@@ -25,7 +25,7 @@ class Anagrams: NSObject {
         self.inventories = inventories
     }
 
-    func generateAnagrams(text: String, max: Int?, block: @escaping (Double) -> Void) throws -> Set<Set<String>> {
+    func generateAnagrams(text: String, max: Int?, block: @escaping (Double) -> Void, fast: Bool) throws -> Set<Set<String>> {
         if max != nil && max! < 0 {
             throw AnagramsError.invalidMaximumNumberOfWords
         }
@@ -36,8 +36,57 @@ class Anagrams: NSObject {
                 relevantWords.insert(word)
             }
         }
-        return generateAnagrams(remainingLetters: lettersInText, relevantWords: relevantWords,
-                                anagrams: Set<String>(), max: max, depth: 0, block: block)
+
+        if fast {
+            return generateAnagrams2(remainingLetters: lettersInText, relevantWords: relevantWords,
+                                     anagrams: Set<String>(), max: max, block: block)
+        } else {
+            return generateAnagrams(remainingLetters: lettersInText, relevantWords: relevantWords,
+                                    anagrams: Set<String>(), max: max, depth: 0, block: block)
+        }
+    }
+
+
+    func generateAnagrams2(remainingLetters: LetterInventory, relevantWords: Set<String>,
+                           anagrams: Set<String>, max: Int?, block: @escaping (Double) -> Void) -> Set<Set<String>> {
+        var results = Set<Set<String>>()
+        var progress = 0;
+        let queue = OperationQueue();
+        for word in relevantWords {
+            if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
+                if (max == nil || anagrams.count < max!) {
+                    func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
+                                          anagrams: Set<String>, max: Int?) {
+                        if (remainingLetters.isEmpty()) {
+                            results.formUnion(Set([anagrams]))
+                        } else {
+                            for word in relevantWords {
+                                if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
+                                    if (max == nil || anagrams.count < max!) {
+                                        generateAnagrams(remainingLetters: sub,
+                                                         relevantWords: relevantWords,
+                                                         anagrams: anagrams.union([word]),
+                                                         max: max)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    queue.addOperation({
+                        generateAnagrams(remainingLetters: sub,
+                                         relevantWords: relevantWords,
+                                         anagrams: anagrams.union([word]),
+                                         max: max)
+                        OperationQueue.main.addOperation({
+                            block(Double(progress) / Double(relevantWords.count))
+                        })
+                        progress += 1
+                    })
+                }
+            }
+        }
+        queue.waitUntilAllOperationsAreFinished()
+        return results
     }
 
     func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
@@ -48,24 +97,23 @@ class Anagrams: NSObject {
             var results = Set<Set<String>>()
             var progress = 0;
             for word in relevantWords {
-//                var operation = BlockOperation(block: { 
-                    if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
-                        if (max == nil || anagrams.count < max!) {
-                            let result = self.generateAnagrams(remainingLetters: sub,
-                                                               relevantWords: relevantWords,
-                                                               anagrams: anagrams.union([word]),
-                                                               max: max,
-                                                               depth: depth + 1,
-                                                               block: block)
-                            results.formUnion(result)
-                        }
+                if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
+                    if (max == nil || anagrams.count < max!) {
+                        let result = self.generateAnagrams(remainingLetters: sub,
+                                                           relevantWords: relevantWords,
+                                                           anagrams: anagrams.union([word]),
+                                                           max: max,
+                                                           depth: depth + 1,
+                                                           block: block)
+                        results.formUnion(result)
                     }
-                    if (depth == 0) {
-//                        OperationQueue.main.addOperation(block)
+                }
+                if (depth == 0) {
+                    OperationQueue.main.addOperation({
                         block(Double(progress) / Double(relevantWords.count))
-                        progress += 1;
-                    }
-//                })
+                    })
+                    progress += 1;
+                }
             }
             return results
         }
