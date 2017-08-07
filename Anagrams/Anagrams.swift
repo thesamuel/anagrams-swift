@@ -25,7 +25,7 @@ class Anagrams: NSObject {
         self.inventories = inventories
     }
 
-    func generateAnagrams(text: String, max: Int?, block: @escaping (Double) -> Void, fast: Bool) throws -> Set<Set<String>> {
+    func generateAnagrams(text: String, max: Int?, block: @escaping (Double) -> Void) throws -> Set<Set<String>> {
         if max != nil && max! < 0 {
             throw AnagramsError.invalidMaximumNumberOfWords
         }
@@ -41,7 +41,6 @@ class Anagrams: NSObject {
                 anagrams: Set<String>(), max: max, progress: block)
     }
 
-
     func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
                           anagrams: Set<String>, max: Int?,
                           progress: @escaping (Double) -> Void) -> Set<Set<String>> {
@@ -51,7 +50,9 @@ class Anagrams: NSObject {
         func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
                               anagrams: Set<String>, max: Int?, depth: Int) {
             if (remainingLetters.isEmpty()) {
-                results.formUnion(Set([anagrams]))
+                OperationQueue.main.addOperation({
+                    results.formUnion(Set([anagrams]))
+                })
             } else {
                 for word in relevantWords {
                     if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
@@ -59,12 +60,12 @@ class Anagrams: NSObject {
                             let processWord = BlockOperation {
                                 generateAnagrams(remainingLetters: sub, relevantWords: relevantWords,
                                                  anagrams: anagrams.union([word]), max: max, depth: depth + 1)
-                                processedWords += 1
                             }
                             queue.addOperation(processWord)
                             if depth == 0 {
                                 let updateProgress = BlockOperation {
                                     OperationQueue.main.addOperation({
+                                        processedWords += 1
                                         progress(Double(processedWords) / Double(relevantWords.count))
                                     })
                                 }

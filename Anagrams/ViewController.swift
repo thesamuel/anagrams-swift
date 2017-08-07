@@ -71,13 +71,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func generateAnagrams(_ sender: Any) {
         if let text = self.textField.text {
             DispatchQueue.global(qos: .userInitiated).async {
-                let fast: Bool = self.speedControl.selectedSegmentIndex == 0
-                if fast {
-                    print("fast processing beginning")
-                } else {
-                    print("slow processing beginning")
-                }
-                self.anagramResults = self.generateAnagrams(text: text, fast: fast)
+                self.anagramResults = self.generateAnagrams(text: text)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -89,7 +83,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.progressView.progress = Float(percent)
     }
 
-    func generateAnagrams(text: String, fast: Bool) -> Array<Set<String>>? {
+    func generateAnagrams(text: String) -> Array<Set<String>>? {
         DispatchQueue.main.async {
             self.anagramResults = nil
             self.tableView.reloadData()
@@ -98,11 +92,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         do {
             let start = Date();
-            if let results = try anagramSolver?.generateAnagrams(text: text, max: nil, block: updateProgress, fast: fast) {
+            if let results = try anagramSolver?.generateAnagrams(text: text, max: nil, block: updateProgress) {
                 DispatchQueue.main.async {
                     self.progressView.progress = 1 // TODO: handle error with color
                 }
-                print(Date().timeIntervalSince(start))
+                print("Anagram solved in \(Date().timeIntervalSince(start)) seconds")
                 return Array.init(results)
             }
         } catch {
