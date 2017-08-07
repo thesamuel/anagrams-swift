@@ -37,17 +37,12 @@ class Anagrams: NSObject {
             }
         }
 
-        if fast {
-            return generateAnagrams2(remainingLetters: lettersInText, relevantWords: relevantWords,
-                                     anagrams: Set<String>(), max: max, block: block)
-        } else {
-            return generateAnagrams(remainingLetters: lettersInText, relevantWords: relevantWords,
-                                    anagrams: Set<String>(), max: max, depth: 0, block: block)
-        }
+        return generateAnagrams(remainingLetters: lettersInText, relevantWords: relevantWords,
+                anagrams: Set<String>(), max: max, block: block)
     }
 
 
-    func generateAnagrams2(remainingLetters: LetterInventory, relevantWords: Set<String>,
+    func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
                            anagrams: Set<String>, max: Int?, block: @escaping (Double) -> Void) -> Set<Set<String>> {
         var results = Set<Set<String>>()
         var progress = 0;
@@ -87,35 +82,5 @@ class Anagrams: NSObject {
         }
         queue.waitUntilAllOperationsAreFinished()
         return results
-    }
-
-    func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
-                          anagrams: Set<String>, max: Int?, depth: Int, block: @escaping (Double) -> Void) -> Set<Set<String>> {
-        if (remainingLetters.isEmpty()) {
-            return Set([anagrams])
-        } else {
-            var results = Set<Set<String>>()
-            var progress = 0;
-            for word in relevantWords {
-                if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
-                    if (max == nil || anagrams.count < max!) {
-                        let result = self.generateAnagrams(remainingLetters: sub,
-                                                           relevantWords: relevantWords,
-                                                           anagrams: anagrams.union([word]),
-                                                           max: max,
-                                                           depth: depth + 1,
-                                                           block: block)
-                        results.formUnion(result)
-                    }
-                }
-                if (depth == 0) {
-                    OperationQueue.main.addOperation({
-                        block(Double(progress) / Double(relevantWords.count))
-                    })
-                    progress += 1;
-                }
-            }
-            return results
-        }
     }
 }
