@@ -102,19 +102,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 DispatchQueue.main.async {
                     self.progressView.progress = 1 // TODO: handle error with color
                 }
-                let end = Date();
-                let timeInterval: TimeInterval = end.timeIntervalSince(start)
-                print(timeInterval)
+                print(Date().timeIntervalSince(start))
                 return Array.init(results)
             }
         } catch {
             print(error)
         }
         return nil
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
