@@ -38,48 +38,46 @@ class Anagrams: NSObject {
         }
 
         return generateAnagrams(remainingLetters: lettersInText, relevantWords: relevantWords,
-                anagrams: Set<String>(), max: max, block: block)
+                anagrams: Set<String>(), max: max, progress: block)
     }
 
 
     func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
-                           anagrams: Set<String>, max: Int?, block: @escaping (Double) -> Void) -> Set<Set<String>> {
+                          anagrams: Set<String>, max: Int?,
+                          progress: @escaping (Double) -> Void) -> Set<Set<String>> {
         var results = Set<Set<String>>()
-        var progress = 0;
         let queue = OperationQueue();
-        for word in relevantWords {
-            if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
-                if (max == nil || anagrams.count < max!) {
-                    func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
-                                          anagrams: Set<String>, max: Int?) {
-                        if (remainingLetters.isEmpty()) {
-                            results.formUnion(Set([anagrams]))
-                        } else {
-                            for word in relevantWords {
-                                if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
-                                    if (max == nil || anagrams.count < max!) {
-                                        generateAnagrams(remainingLetters: sub,
-                                                         relevantWords: relevantWords,
-                                                         anagrams: anagrams.union([word]),
-                                                         max: max)
-                                    }
+        var processedWords = 0;
+        func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
+                              anagrams: Set<String>, max: Int?, depth: Int) {
+            if (remainingLetters.isEmpty()) {
+                results.formUnion(Set([anagrams]))
+            } else {
+                for word in relevantWords {
+                    if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
+                        if (max == nil || anagrams.count < max!) {
+                            let processWord = BlockOperation {
+                                generateAnagrams(remainingLetters: sub, relevantWords: relevantWords,
+                                                 anagrams: anagrams.union([word]), max: max, depth: depth + 1)
+                                processedWords += 1
+                            }
+                            queue.addOperation(processWord)
+                            if depth == 0 {
+                                let updateProgress = BlockOperation {
+                                    OperationQueue.main.addOperation({
+                                        progress(Double(processedWords) / Double(relevantWords.count))
+                                    })
                                 }
+                                updateProgress.addDependency(processWord)
+                                queue.addOperation(updateProgress)
                             }
                         }
                     }
-                    queue.addOperation({
-                        generateAnagrams(remainingLetters: sub,
-                                         relevantWords: relevantWords,
-                                         anagrams: anagrams.union([word]),
-                                         max: max)
-                        OperationQueue.main.addOperation({
-                            block(Double(progress) / Double(relevantWords.count))
-                        })
-                        progress += 1
-                    })
                 }
             }
         }
+        generateAnagrams(remainingLetters: remainingLetters, relevantWords: relevantWords,
+                         anagrams: anagrams, max: max, depth: 0)
         queue.waitUntilAllOperationsAreFinished()
         return results
     }
