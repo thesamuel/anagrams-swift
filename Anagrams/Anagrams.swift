@@ -48,7 +48,7 @@ class Anagrams: NSObject {
         let queue = OperationQueue();
         var processedWords = 0;
         func generateAnagrams(remainingLetters: LetterInventory, relevantWords: Set<String>,
-                              anagrams: Set<String>, max: Int?, depth: Int) {
+                              anagrams: Set<String>, max: Int?) {
             if (remainingLetters.isEmpty()) {
                 OperationQueue.main.addOperation({
                     processedWords += 1 // TODO: this doesn't work with sets (no duplicates)
@@ -59,21 +59,16 @@ class Anagrams: NSObject {
                 for word in relevantWords {
                     if let sub = remainingLetters.subtract(other: self.inventories[word]!) {
                         if (max == nil || anagrams.count < max!) {
-                            if (depth == 0) {
-                                queue.addOperation({
-                                    generateAnagrams(remainingLetters: sub, relevantWords: relevantWords,
-                                                     anagrams: anagrams.union([word]), max: max, depth: depth + 1)
-                                })
-                            } else {
+                            queue.addOperation({
                                 generateAnagrams(remainingLetters: sub, relevantWords: relevantWords,
-                                                 anagrams: anagrams.union([word]), max: max, depth: depth + 1)
-                            }
+                                                 anagrams: anagrams.union([word]), max: max)
+                            })
                         }
                     }
                 }
             }
         }
         generateAnagrams(remainingLetters: remainingLetters, relevantWords: relevantWords,
-                         anagrams: anagrams, max: max, depth: 0)
+                         anagrams: anagrams, max: max)
     }
 }

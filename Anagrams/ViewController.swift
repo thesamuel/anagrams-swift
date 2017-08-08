@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RateLimit
 
 class ViewController: UIViewController {
 
@@ -48,13 +49,10 @@ class ViewController: UIViewController {
     }
 
     // Actions
-    @IBAction func donePressed(_ sender: Any) {
+    @IBAction func generate(_ sender: Any) {
         textField.endEditing(false)
-    }
-
-    @IBAction func generateAnagrams(_ sender: Any) {
         if let text = self.textField.text {
-            anagrams = [Set<String>]()
+            anagrams.removeAll()
             self.tableView.reloadData()
             self.progressView.progress = 0
             DispatchQueue.global(qos: .userInitiated).async {
@@ -67,10 +65,13 @@ class ViewController: UIViewController {
         }
     }
 
+    let reloadTableView = TimedLimiter(limit: 0.3)
     func updateProgress(anagram: Set<String>, percent: Double) {
-        progressView.progress = Float(percent)
         anagrams.append(anagram)
-        tableView.reloadData()
+        reloadTableView.execute {
+            progressView.progress = Float(percent)
+            tableView.reloadData()
+        }
 //        tableView.insertRows(at: [IndexPath(row: anagrams.count - 1, section: 0)], with: .automatic)
     }
 }
