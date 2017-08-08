@@ -1,0 +1,12 @@
+PODS:
+  - RateLimit (2.1.1)
+
+DEPENDENCIES:
+  - RateLimit
+
+SPEC CHECKSUMS:
+  RateLimit: 7fbf87b1bedabddb258f08230a6ece05b884d41f
+
+PODFILE CHECKSUM: 592cc16b78db681647c6bce94d535b6cf0a08b54
+
+COCOAPODS: 1.2.1

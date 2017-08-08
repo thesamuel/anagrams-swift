@@ -17,9 +17,12 @@
 		6148D3951EED010900E691AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6148D3931EED010900E691AA /* Main.storyboard */; };
 		6148D3971EED010900E691AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6148D3961EED010900E691AA /* Assets.xcassets */; };
 		6148D39A1EED010900E691AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6148D3981EED010900E691AA /* LaunchScreen.storyboard */; };
+		802229E719ED8462E80B0549 /* Pods_Anagrams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15DD826E17AE3681DA1D20D0 /* Pods_Anagrams.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		15DD826E17AE3681DA1D20D0 /* Pods_Anagrams.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anagrams.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		296646B081C50FFC05E9C8C2 /* Pods-Anagrams.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anagrams.release.xcconfig"; path = "Pods/Target Support Files/Pods-Anagrams/Pods-Anagrams.release.xcconfig"; sourceTree = "<group>"; };
 		613F8B7F1EF0DF7000C35F0C /* Anagrams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Anagrams.swift; sourceTree = "<group>"; };
 		613F8B811EF0E0B800C35F0C /* LetterInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LetterInventory.swift; sourceTree = "<group>"; };
 		613F8B831EF3AEEC00C35F0C /* dict3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dict3.txt; sourceTree = "<group>"; };
@@ -32,6 +35,7 @@
 		6148D3961EED010900E691AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6148D3991EED010900E691AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6148D39B1EED010900E691AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BC5F0F4C8CB654B126AAFBA8 /* Pods-Anagrams.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anagrams.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Anagrams/Pods-Anagrams.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				802229E719ED8462E80B0549 /* Pods_Anagrams.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +55,8 @@
 			children = (
 				6148D38E1EED010900E691AA /* Anagrams */,
 				6148D38D1EED010900E691AA /* Products */,
+				826D6CB4DF050D6203149C2D /* Pods */,
+				7A08D10242A0F923BE9F9BD1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,6 +86,23 @@
 			path = Anagrams;
 			sourceTree = "<group>";
 		};
+		7A08D10242A0F923BE9F9BD1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				15DD826E17AE3681DA1D20D0 /* Pods_Anagrams.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		826D6CB4DF050D6203149C2D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BC5F0F4C8CB654B126AAFBA8 /* Pods-Anagrams.debug.xcconfig */,
+				296646B081C50FFC05E9C8C2 /* Pods-Anagrams.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -86,9 +110,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6148D39E1EED010900E691AA /* Build configuration list for PBXNativeTarget "Anagrams" */;
 			buildPhases = (
+				7CE011535511C7DDEDAF790A /* [CP] Check Pods Manifest.lock */,
 				6148D3881EED010900E691AA /* Sources */,
 				6148D3891EED010900E691AA /* Frameworks */,
 				6148D38A1EED010900E691AA /* Resources */,
+				977289709BA1A6E76A656F30 /* [CP] Embed Pods Frameworks */,
+				CFF54234E22CD1AB0E41710B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -149,6 +176,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7CE011535511C7DDEDAF790A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		977289709BA1A6E76A656F30 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anagrams/Pods-Anagrams-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CFF54234E22CD1AB0E41710B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Anagrams/Pods-Anagrams-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6148D3881EED010900E691AA /* Sources */ = {
@@ -279,6 +354,7 @@
 		};
 		6148D39F1EED010900E691AA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BC5F0F4C8CB654B126AAFBA8 /* Pods-Anagrams.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 567KX7DD6P;
@@ -292,6 +368,7 @@
 		};
 		6148D3A01EED010900E691AA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 296646B081C50FFC05E9C8C2 /* Pods-Anagrams.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 567KX7DD6P;
